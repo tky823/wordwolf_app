@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,7 +82,9 @@ class _HomePageState extends State<HomePage> {
                 child: Text('部屋の作成'),
                 color: Colors.orange,
                 textColor: Colors.white,
-                onPressed: () {},
+                onPressed: () async {
+                  await _makeRoom();
+                },
               ),
             ),
             Padding(
@@ -90,7 +93,9 @@ class _HomePageState extends State<HomePage> {
                 child: Text('部屋に入る'),
                 color: Colors.orange,
                 textColor: Colors.white,
-                onPressed: () {},
+                onPressed: () async {
+                  await _enterRoom();
+                },
               ),
             ),
           ],
@@ -125,5 +130,287 @@ class _HomePageState extends State<HomePage> {
         _error = true;
       });
     }
+  }
+
+  Future<void> _existsRoom(String roomId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection(roomsString)
+        .doc(roomId)
+        .get();
+
+    Map<String, dynamic> data = snapshot.data();
+    if (data == null) {
+      _roomExists = false;
+    } else {
+      _roomExists = true;
+    }
+  }
+
+  Future<void> _validatesEntrace(String roomId) async {
+    DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection(roomsString)
+        .doc(roomId)
+        .get();
+
+    Map<String, dynamic> data = snapshot.data();
+    if (data == null) {
+      _roomIsLocked = false;
+    } else {
+      if (data['isLocked']) {
+        _roomIsLocked = true;
+      } else {
+        _roomIsLocked = false;
+      }
+    }
+  }
+
+  Future<void> _validatesPassword(String inputPassword) async {
+    if (!_roomExists) {
+      _isValidPassword = false;
+      return;
+    }
+
+    final DocumentSnapshot snapshot = await FirebaseFirestore.instance
+        .collection(roomsString)
+        .doc(_roomId)
+        .get();
+    final data = snapshot.data();
+    _isValidPassword = (inputPassword == data['password']);
+  }
+
+  Future<void> _makeRoom() async {
+    await _showMakingRoomAlertDialog(context);
+
+    if (_nextPageTransitionIs) {
+      // TODO: implement transition
+    }
+  }
+
+  Future<void> _enterRoom() async {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInAnonymously();
+    _uid = userCredential.user.uid;
+    print('uid: $_uid');
+
+    await _showEntranceAlertDialog(context);
+
+    if (_nextPageTransitionIs) {
+      // TODO: implement transition
+    }
+  }
+
+  Future<void> _showMakingRoomAlertDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20.0),
+          title: Text('部屋の作成'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                initialValue: _username,
+                decoration: InputDecoration(
+                  labelText: 'ユーザ名',
+                ),
+                onChanged: (text) {
+                  setState(() {
+                    _username = text;
+                  });
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: '部屋のID',
+                ),
+                onChanged: (text) {
+                  setState(() {
+                    _roomId = text;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('作成'),
+              onPressed: () async {
+                await _existsRoom(_roomId);
+
+                Navigator.pop(context);
+
+                if (_roomExists) {
+                  print("$_roomId already exists.");
+                  _nextPageTransitionIs = false;
+                } else if (_roomId.length < 6) {
+                  print(
+                      "$_roomId was chosen as room ID. Set more than 6 characters for room ID.");
+                  _nextPageTransitionIs = false;
+                } else {
+                  print("Make new room $_roomId.");
+
+                  _nextPageTransitionIs = true;
+
+                  final random = math.Random();
+                  final password = random
+                      .nextInt(math.pow(10, _digit))
+                      .toString()
+                      .padLeft(_digit, '0');
+
+                  Map<String, dynamic> roomData = {
+                    'roomId': _roomId,
+                    'password': password,
+                    'masterUid': _uid,
+                    'timestamp': Timestamp.now(),
+                    'isLocked': false
+                  };
+
+                  await FirebaseFirestore.instance
+                      .collection(roomsString)
+                      .doc(_roomId)
+                      .set(roomData);
+
+                  Map<String, dynamic> userData = {
+                    'uid': _uid,
+                    'name': _username,
+                    'votes': 0,
+                  };
+
+                  await FirebaseFirestore.instance
+                      .collection(roomsString)
+                      .doc(_roomId)
+                      .collection(membersString)
+                      .doc(_uid)
+                      .set(userData);
+
+                  Map<String, dynamic> transitionTriggerData = {
+                    'startsDiscussion': false,
+                    'endsDiscussion': false,
+                    'endsVoting': false,
+                  };
+
+                  await FirebaseFirestore.instance
+                      .collection(roomsString)
+                      .doc(_roomId)
+                      .collection(triggersString)
+                      .doc(transitionsString)
+                      .set(transitionTriggerData);
+                }
+              },
+            ),
+            FlatButton(
+              child: Text('戻る'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showEntranceAlertDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20.0),
+          title: Text('既存の部屋に参加'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                initialValue: _username,
+                decoration: InputDecoration(
+                  labelText: 'ユーザ名',
+                ),
+                onChanged: (text) {
+                  _username = text;
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: '部屋のID',
+                ),
+                onChanged: (text) {
+                  setState(() {
+                    _roomId = text;
+                  });
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'パスワード',
+                ),
+                onChanged: (text) {
+                  setState(() {
+                    _password = text;
+                  });
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('入室'),
+              onPressed: () async {
+                await _existsRoom(_roomId);
+                await _validatesEntrace(_roomId);
+                await _validatesPassword(_password);
+
+                Navigator.pop(context);
+
+                if (!_roomExists) {
+                  // TODO: Alert
+                  print("ルーム" + _roomId + "は存在しません");
+                  _nextPageTransitionIs = false;
+                  return;
+                }
+
+                if (_roomIsLocked) {
+                  // TODO: Alert
+                  print("ルーム" + _roomId + "に参加できません");
+                  _nextPageTransitionIs = false;
+                  return;
+                }
+
+                if (!_isValidPassword) {
+                  // TODO: Alert
+                  print("パスワードが間違っています");
+                  _nextPageTransitionIs = false;
+                  return;
+                }
+
+                _nextPageTransitionIs = true;
+
+                Map<String, dynamic> userData = {
+                  'uid': _uid,
+                  'name': _username,
+                  'votes': 0,
+                };
+
+                await FirebaseFirestore.instance
+                    .collection(roomsString)
+                    .doc(_roomId)
+                    .collection(membersString)
+                    .doc(_uid)
+                    .set(userData);
+              },
+            ),
+            FlatButton(
+              child: Text('戻る'),
+              onPressed: () {
+                _nextPageTransitionIs = false;
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
