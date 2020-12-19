@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'error_page.dart';
 import 'maintenance_page.dart';
+import 'master_waiting_room.dart';
+import 'player_waiting_room.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -182,7 +184,13 @@ class _HomePageState extends State<HomePage> {
     await _showMakingRoomAlertDialog(context);
 
     if (_nextPageTransitionIs) {
-      // TODO: implement transition
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => MasterWaitingRoomPage(
+              roomId: _roomId,
+            ),
+          ));
     }
   }
 
@@ -195,7 +203,13 @@ class _HomePageState extends State<HomePage> {
     await _showEntranceAlertDialog(context);
 
     if (_nextPageTransitionIs) {
-      // TODO: implement transition
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayerWaitingRoomPage(
+              roomId: _roomId,
+            ),
+          ));
     }
   }
 
