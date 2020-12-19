@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'customized_font.dart';
 import 'record.dart';
+import 'master_discussion_room.dart';
 
 class MasterWaitingRoomPage extends StatefulWidget {
   final String roomId;
@@ -254,7 +255,13 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
                   .doc(transitionsString)
                   .update(transitionsData);
 
-              // TODO: implement transition
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MasterDiscussionRoomPage(
+                      roomId: _roomId,
+                    ),
+                  ));
             },
           ),
         ],

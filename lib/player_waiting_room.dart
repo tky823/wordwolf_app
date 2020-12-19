@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'customized_font.dart';
 import 'record.dart';
+import 'player_discussion_room.dart';
 
 class PlayerWaitingRoomPage extends StatefulWidget {
   final String roomId;
@@ -151,7 +152,13 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
         deactivateMonitoringTriggers();
         deactivateMonitoringRoom();
 
-        // TODO: implement transition
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PlayerDiscussionRoomPage(
+                roomId: _roomId,
+              ),
+            ));
       }
     });
   }
