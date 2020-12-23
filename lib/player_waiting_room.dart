@@ -141,9 +141,9 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
       final DocumentSnapshot transitionsSnapshot =
           await triggersReference.doc(transitionsString).get();
 
-      final data = transitionsSnapshot.data();
+      final transitionsData = transitionsSnapshot.data();
 
-      if (data['startsDiscussion']) {
+      if (transitionsData['startsDiscussion']) {
         deactivateMonitoringTriggers();
         deactivateMonitoringRoom();
 

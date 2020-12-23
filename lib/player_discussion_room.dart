@@ -177,6 +177,31 @@ class _PlayerDiscussionRoomPageState extends State<PlayerDiscussionRoomPage> {
   }
 
   void activateMonitoringTriggers() {
+    final CollectionReference triggersReference = FirebaseFirestore.instance
+        .collection(roomsString)
+        .doc(_roomId)
+        .collection(triggersString);
+    _triggersStreamSubscription =
+        triggersReference.snapshots().listen((event) async {
+      DocumentSnapshot transitionsSnapshot =
+          await triggersReference.doc(transitionsString).get();
+
+      final transitionsData = transitionsSnapshot.data();
+
+      if (transitionsData['endsDiscussion']) {
+        deactivateTimer();
+        deactivateMonitoringTriggers();
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PlayerVotingRoomPage(
+                      roomId: _roomId,
+                      themes: _themes,
+                    )));
+      }
+    });
+    /*
     _triggersStreamSubscription = FirebaseFirestore.instance
         .collection(roomsString)
         .doc(_roomId)
@@ -205,7 +230,7 @@ class _PlayerDiscussionRoomPageState extends State<PlayerDiscussionRoomPage> {
                       themes: _themes,
                     )));
       }
-    });
+    });*/
   }
 
   void deactivateMonitoringTriggers() {
