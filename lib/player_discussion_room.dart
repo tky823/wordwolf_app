@@ -201,36 +201,6 @@ class _PlayerDiscussionRoomPageState extends State<PlayerDiscussionRoomPage> {
                     )));
       }
     });
-    /*
-    _triggersStreamSubscription = FirebaseFirestore.instance
-        .collection(roomsString)
-        .doc(_roomId)
-        .collection(triggersString)
-        .snapshots()
-        .listen((event) async {
-      // TODO: Modify?
-      DocumentSnapshot transitionsSnapshot = await FirebaseFirestore.instance
-          .collection(roomsString)
-          .doc(_roomId)
-          .collection(triggersString)
-          .doc(transitionsString)
-          .get();
-
-      final transitionsData = transitionsSnapshot.data();
-
-      if (transitionsData['endsDiscussion']) {
-        deactivateTimer();
-        deactivateMonitoringTriggers();
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PlayerVotingRoomPage(
-                      roomId: _roomId,
-                      themes: _themes,
-                    )));
-      }
-    });*/
   }
 
   void deactivateMonitoringTriggers() {
