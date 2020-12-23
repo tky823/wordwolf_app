@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'customized_font.dart';
 import 'error_page.dart';
 import 'maintenance_page.dart';
 import 'master_waiting_room.dart';
@@ -256,9 +257,12 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
 
                 if (_roomExists) {
+                  showMakingRoomFailureAlertDialog(context);
+
                   print("$_roomId already exists.");
                   _nextPageTransitionIs = false;
                 } else if (_roomId.length < 6) {
+                  // TODO: Alert
                   print(
                       "$_roomId was chosen as room ID. Set more than 6 characters for room ID.");
                   _nextPageTransitionIs = false;
@@ -379,21 +383,24 @@ class _HomePageState extends State<HomePage> {
                 Navigator.pop(context);
 
                 if (!_roomExists) {
-                  // TODO: Alert
+                  showEnteringRoomFailureAlertDialog(context);
+
                   print("ルーム" + _roomId + "は存在しません");
                   _nextPageTransitionIs = false;
                   return;
                 }
 
                 if (_roomIsLocked) {
-                  // TODO: Alert
+                  showEnteringRoomFailureAlertDialog(context);
+
                   print("ルーム" + _roomId + "に参加できません");
                   _nextPageTransitionIs = false;
                   return;
                 }
 
                 if (!_isValidPassword) {
-                  // TODO: Alert
+                  showEnteringRoomFailureAlertDialog(context);
+
                   print("パスワードが間違っています");
                   _nextPageTransitionIs = false;
                   return;
@@ -419,6 +426,60 @@ class _HomePageState extends State<HomePage> {
               child: Text('戻る'),
               onPressed: () {
                 _nextPageTransitionIs = false;
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showMakingRoomFailureAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20.0),
+          title: Text('部屋の作成に失敗'),
+          content: Container(
+            child: Text(
+              "ルーム" + _roomId + "はすでに存在しています．",
+              style: smallerNormalFont,
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('戻る'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showEnteringRoomFailureAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.all(20.0),
+          title: Text('入室に失敗'),
+          content: Container(
+            child: Text(
+              "ルーム" + _roomId + "が存在しない，またはパスワードが間違っています．",
+              style: smallerNormalFont,
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('戻る'),
+              onPressed: () {
                 Navigator.pop(context);
               },
             ),
