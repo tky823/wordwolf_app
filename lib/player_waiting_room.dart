@@ -132,19 +132,14 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
   }
 
   void activateMonitoringTriggers() {
-    _triggersStreamSubscription = FirebaseFirestore.instance
+    final CollectionReference triggersReference = FirebaseFirestore.instance
         .collection(roomsString)
         .doc(_roomId)
-        .collection(triggersString)
-        .snapshots()
-        .listen((event) async {
-      // TODO: Simplify trigger
-      DocumentSnapshot transitionsSnapshot = await FirebaseFirestore.instance
-          .collection(roomsString)
-          .doc(_roomId)
-          .collection(triggersString)
-          .doc(transitionsString)
-          .get();
+        .collection(triggersString);
+    _triggersStreamSubscription =
+        triggersReference.snapshots().listen((event) async {
+      final DocumentSnapshot transitionsSnapshot =
+          await triggersReference.doc(transitionsString).get();
 
       final data = transitionsSnapshot.data();
 
