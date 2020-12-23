@@ -205,24 +205,18 @@ class _PlayerResultRoomPageState extends State<PlayerResultRoomPage> {
   }
 
   void activateMonitoringTriggers() {
-    _triggersStreamSubscription = FirebaseFirestore.instance
+    final CollectionReference triggersReference = FirebaseFirestore.instance
         .collection(roomsString)
         .doc(_roomId)
-        .collection(triggersString)
-        .snapshots()
-        .listen((event) async {
-      // TODO: Simplify trigger
+        .collection(triggersString);
 
-      DocumentSnapshot transitionsSnapshot = await FirebaseFirestore.instance
-          .collection(roomsString)
-          .doc(_roomId)
-          .collection(triggersString)
-          .doc(transitionsString)
-          .get();
+    triggersReference.snapshots().listen((event) async {
+      DocumentSnapshot transitionsSnapshot =
+          await triggersReference.doc(transitionsString).get();
 
-      final data = transitionsSnapshot.data();
+      final transitionsData = transitionsSnapshot.data();
 
-      if (data['startsDiscussion']) {
+      if (transitionsData['startsDiscussion']) {
         deactivateMonitoringTriggers();
         deactivateMonitoringRoom();
         deactivateMonitoringMembers();
