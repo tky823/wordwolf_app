@@ -174,13 +174,15 @@ class _MasterDiscussionRoomPageState extends State<MasterDiscussionRoomPage> {
           .doc(transitionsString)
           .update(transitionData);
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MasterVotingRoomPage(
-                    roomId: _roomId,
-                    themes: _themes,
-                  )));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MasterVotingRoomPage(
+                  roomId: _roomId,
+                  themes: _themes,
+                )),
+        (_) => false,
+      );
     }
   }
 }

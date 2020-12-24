@@ -64,7 +64,6 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
         title: Text('ルーム $_roomId'),
       ),
       body: Column(
@@ -255,13 +254,15 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
                   .doc(transitionsString)
                   .update(transitionsData);
 
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MasterDiscussionRoomPage(
-                      roomId: _roomId,
-                    ),
-                  ));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MasterDiscussionRoomPage(
+                    roomId: _roomId,
+                  ),
+                ),
+                (_) => false,
+              );
             },
           ),
         ],

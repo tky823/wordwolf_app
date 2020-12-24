@@ -63,7 +63,6 @@ class _MasterVotingRoomPageState extends State<MasterVotingRoomPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
         title: Text('ルーム $_roomId'),
       ),
       body: _buildBody(context),
@@ -216,13 +215,15 @@ class _MasterVotingRoomPageState extends State<MasterVotingRoomPage> {
             .doc(transitionsString)
             .update(transitionsData);
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MasterResultRoomPage(
-                      roomId: _roomId,
-                      themes: _themes,
-                    )));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MasterResultRoomPage(
+                    roomId: _roomId,
+                    themes: _themes,
+                  )),
+          (_) => false,
+        );
       }
     });
   }

@@ -147,13 +147,15 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
         deactivateMonitoringTriggers();
         deactivateMonitoringRoom();
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlayerDiscussionRoomPage(
-                roomId: _roomId,
-              ),
-            ));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayerDiscussionRoomPage(
+              roomId: _roomId,
+            ),
+          ),
+          (_) => false,
+        );
       }
     });
   }

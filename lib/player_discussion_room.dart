@@ -166,13 +166,15 @@ class _PlayerDiscussionRoomPageState extends State<PlayerDiscussionRoomPage> {
       deactivateTimer();
       deactivateMonitoringTriggers();
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => PlayerVotingRoomPage(
-                    roomId: _roomId,
-                    themes: _themes,
-                  )));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PlayerVotingRoomPage(
+                  roomId: _roomId,
+                  themes: _themes,
+                )),
+        (_) => false,
+      );
     }
   }
 
@@ -192,13 +194,15 @@ class _PlayerDiscussionRoomPageState extends State<PlayerDiscussionRoomPage> {
         deactivateTimer();
         deactivateMonitoringTriggers();
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => PlayerVotingRoomPage(
-                      roomId: _roomId,
-                      themes: _themes,
-                    )));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => PlayerVotingRoomPage(
+                    roomId: _roomId,
+                    themes: _themes,
+                  )),
+          (_) => false,
+        );
       }
     });
   }

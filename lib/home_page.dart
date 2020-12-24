@@ -185,13 +185,15 @@ class _HomePageState extends State<HomePage> {
     await _showMakingRoomAlertDialog(context);
 
     if (_nextPageTransitionIs) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MasterWaitingRoomPage(
-              roomId: _roomId,
-            ),
-          ));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MasterWaitingRoomPage(
+            roomId: _roomId,
+          ),
+        ),
+        (_) => false,
+      );
     }
   }
 
@@ -204,13 +206,15 @@ class _HomePageState extends State<HomePage> {
     await _showEntranceAlertDialog(context);
 
     if (_nextPageTransitionIs) {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PlayerWaitingRoomPage(
-              roomId: _roomId,
-            ),
-          ));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PlayerWaitingRoomPage(
+            roomId: _roomId,
+          ),
+        ),
+        (_) => false,
+      );
     }
   }
 

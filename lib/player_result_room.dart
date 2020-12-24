@@ -73,7 +73,6 @@ class _PlayerResultRoomPageState extends State<PlayerResultRoomPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
         title: Text('ルーム $_roomId'),
       ),
       body: _buildBody(context),
@@ -121,13 +120,15 @@ class _PlayerResultRoomPageState extends State<PlayerResultRoomPage> {
               deactivateMonitoringMembers();
               deactivateMonitoringRoom();
 
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PlayerBulletinRoomPage(
-                            roomId: _roomId,
-                            themes: _themes,
-                          )));
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => PlayerBulletinRoomPage(
+                          roomId: _roomId,
+                          themes: _themes,
+                        )),
+                (_) => false,
+              );
             }));
       } else {
         columns.add(Container(
@@ -221,13 +222,15 @@ class _PlayerResultRoomPageState extends State<PlayerResultRoomPage> {
         deactivateMonitoringRoom();
         deactivateMonitoringMembers();
 
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PlayerDiscussionRoomPage(
-                roomId: _roomId,
-              ),
-            ));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlayerDiscussionRoomPage(
+              roomId: _roomId,
+            ),
+          ),
+          (_) => false,
+        );
       }
     });
   }

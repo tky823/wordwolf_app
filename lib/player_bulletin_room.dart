@@ -64,7 +64,6 @@ class _PlayerBulletinRoomPageState extends State<PlayerBulletinRoomPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.brown,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: null),
         title: Text('ルーム $_roomId'),
       ),
       body: _buildBody(context),
