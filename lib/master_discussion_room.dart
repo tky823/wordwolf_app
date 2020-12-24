@@ -23,6 +23,8 @@ class _MasterDiscussionRoomPageState extends State<MasterDiscussionRoomPage> {
   final String triggersString = 'triggers';
   final String transitionsString = 'transitions';
   final String timerString = 'timer';
+  final String citizenString = 'citizen';
+  final String werewolfString = 'werewolf';
 
   final _formatter = DateFormat('m:ss');
 
@@ -117,16 +119,16 @@ class _MasterDiscussionRoomPageState extends State<MasterDiscussionRoomPage> {
         .get();
 
     final Map<String, dynamic> themesData = themesSnapshot.data();
-    _themes['citizen'] = themesData['citizen'];
-    _themes['werewolf'] = themesData['werewolf'];
+    _themes[citizenString] = themesData[citizenString];
+    _themes[werewolfString] = themesData[werewolfString];
 
     setState(() {
       _uid = user.uid;
 
       if (_uid == werewolfUid) {
-        _theme = _themes['werewolf'];
+        _theme = _themes[werewolfString];
       } else {
-        _theme = _themes['citizen'];
+        _theme = _themes[citizenString];
       }
 
       _difference = _discussionEndTime.difference(DateTime.now());

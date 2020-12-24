@@ -23,6 +23,8 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
   final String membersString = 'members';
   final String triggersString = 'triggers';
   final String transitionsString = 'transitions';
+  final String genreIdString = 'genreId';
+  final String genreNameString = 'genreName';
   final int minMembers = 3;
   final Map<String, int> setting = {
     'discussionTimeMinutesMin': 1,
@@ -99,8 +101,8 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
                     _genre = _genres[_genreIndex];
                   });
                   final Map<String, String> roomData = {
-                    'genreId': _genre['genreId'],
-                    'genreName': _genre['genreName']
+                    genreIdString: _genre[genreIdString],
+                    genreNameString: _genre[genreNameString]
                   };
 
                   await FirebaseFirestore.instance
@@ -110,7 +112,7 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
                 },
               ),
               title: Text(
-                _genre['genreName'],
+                _genre[genreNameString],
                 style: biggerNormalFont,
                 textAlign: TextAlign.center,
               ),
@@ -124,8 +126,8 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
                     _genre = _genres[_genreIndex];
                   });
                   final Map<String, String> roomData = {
-                    'genreId': _genre['genreId'],
-                    'genreName': _genre['genreName']
+                    genreIdString: _genre[genreIdString],
+                    genreNameString: _genre[genreNameString]
                   };
 
                   await FirebaseFirestore.instance
@@ -229,7 +231,7 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
                     };
 
                     Map<String, dynamic> themeData =
-                        await getRandomThemeInfo(_genre['genreId']);
+                        await getRandomThemeInfo(_genre[genreIdString]);
 
                     roomData.addAll(themeData);
 
@@ -297,8 +299,8 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
     });
 
     final Map<String, dynamic> roomData = {
-      'genreId': _genre['genreId'],
-      'genreName': _genre['genreName'],
+      genreIdString: _genre[genreIdString],
+      genreNameString: _genre[genreNameString],
       'discussionTimeMinutes': _discussionTimeMinutes
     };
 
@@ -372,10 +374,10 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
         await FirebaseFirestore.instance.collection(genresString).get();
     final genres = genreSnapshot.docs.map((snapshot) {
       final data = snapshot.data();
-      final String genreId = data['genreId'];
-      final String genreName = data['genreName'];
+      final String genreId = data[genreIdString];
+      final String genreName = data[genreNameString];
 
-      return {'genreId': genreId, 'genreName': genreName};
+      return {genreIdString: genreId, genreNameString: genreName};
     }).toList();
     return genres;
   }
@@ -394,7 +396,7 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
     final themeData = documentSnapshot.data();
 
     Map<String, dynamic> themeInfo = {
-      'genreId': genreId,
+      genreIdString: genreId,
       'themesId': themeData['themesId']
     };
 

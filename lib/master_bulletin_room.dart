@@ -22,6 +22,9 @@ class _MasterBulletinRoomPageState extends State<MasterBulletinRoomPage> {
   final String triggersString = 'triggers';
   final String transitionsString = 'transitions';
   final String timerString = 'timer';
+  final String uidString = 'uid';
+  final String citizenString = 'citizen';
+  final String werewolfString = 'werewolf';
 
   String _roomId = '-1';
   String _uid = '-1';
@@ -46,9 +49,9 @@ class _MasterBulletinRoomPageState extends State<MasterBulletinRoomPage> {
       _werewolfUid = roomData['werewolfUid'];
 
       if (_uid == _werewolfUid) {
-        _theme = _themes['werewolf'];
+        _theme = _themes[werewolfString];
       } else {
-        _theme = _themes['citizen'];
+        _theme = _themes[citizenString];
       }
     });
   }
@@ -76,8 +79,8 @@ class _MasterBulletinRoomPageState extends State<MasterBulletinRoomPage> {
     final padding = MediaQuery.of(context).padding;
     var canvasHeight =
         size.height - padding.top - padding.bottom - kToolbarHeight;
-    final String citizenTheme = _themes['citizen'];
-    final String werewolfTheme = _themes['werewolf'];
+    final String citizenTheme = _themes[citizenString];
+    final String werewolfTheme = _themes[werewolfString];
 
     return Center(
       child: Column(
@@ -121,7 +124,7 @@ class _MasterBulletinRoomPageState extends State<MasterBulletinRoomPage> {
           List<QueryDocumentSnapshot> werewolfDocumentSnapshot = [];
           documentSnapshot.forEach((snapshot) {
             final data = snapshot.data();
-            if (_werewolfUid == data['uid']) {
+            if (_werewolfUid == data[uidString]) {
               werewolfDocumentSnapshot.add(snapshot);
             }
           });
@@ -153,7 +156,7 @@ class _MasterBulletinRoomPageState extends State<MasterBulletinRoomPage> {
           documentSnapshot.forEach((snapshot) {
             final data = snapshot.data();
 
-            if (_werewolfUid != data['uid']) {
+            if (_werewolfUid != data[uidString]) {
               citizenDocumentSnapshot.add(snapshot);
             }
           });
