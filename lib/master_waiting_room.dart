@@ -23,6 +23,12 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
   final String membersString = 'members';
   final String triggersString = 'triggers';
   final String transitionsString = 'transitions';
+  final int minMembers = 3;
+  final Map<String, int> setting = {
+    'discussionTimeMinutesMin': 1,
+    'discussionTimeMinutesMax': 10,
+    'discussionTimeMinutesDefault': 5
+  };
 
   String _roomId = '-1';
   String _uid = '-1';
@@ -32,11 +38,6 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
   int _genreIndex = 0;
   List<Map<String, String>> _genres = [];
   int _discussionTimeMinutes = 3;
-  Map<String, int> setting = {
-    'discussionTimeMinutesMin': 1,
-    'discussionTimeMinutesMax': 10,
-    'discussionTimeMinutesDefault': 5
-  };
 
   StreamSubscription<QuerySnapshot> _membersStreamSubscription;
 
@@ -213,57 +214,60 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
             ),
             color: Colors.orange,
             textColor: Colors.white,
-            onPressed: () async {
-              final random = math.Random();
+            onPressed: _memberRecords.length < minMembers
+                ? null
+                : () async {
+                    final random = math.Random();
 
-              String werewolfUid =
-                  _memberRecords[random.nextInt(_memberRecords.length)].uid;
+                    String werewolfUid =
+                        _memberRecords[random.nextInt(_memberRecords.length)]
+                            .uid;
 
-              Map<String, dynamic> roomData = {
-                'werewolfUid': werewolfUid,
-                'isLocked': true
-              };
+                    Map<String, dynamic> roomData = {
+                      'werewolfUid': werewolfUid,
+                      'isLocked': true
+                    };
 
-              Map<String, dynamic> themeData =
-                  await getRandomThemeInfo(_genre['genreId']);
+                    Map<String, dynamic> themeData =
+                        await getRandomThemeInfo(_genre['genreId']);
 
-              roomData.addAll(themeData);
+                    roomData.addAll(themeData);
 
-              Map<String, dynamic> timeData = {
-                'discussionEndTime': DateTime.now()
-                    .add(Duration(minutes: _discussionTimeMinutes))
-              };
+                    Map<String, dynamic> timeData = {
+                      'discussionEndTime': DateTime.now()
+                          .add(Duration(minutes: _discussionTimeMinutes))
+                    };
 
-              roomData.addAll(timeData);
+                    roomData.addAll(timeData);
 
-              await FirebaseFirestore.instance
-                  .collection(roomsString)
-                  .doc(_roomId)
-                  .update(roomData);
+                    await FirebaseFirestore.instance
+                        .collection(roomsString)
+                        .doc(_roomId)
+                        .update(roomData);
 
-              deactivateMonitoringMembers();
+                    deactivateMonitoringMembers();
 
-              Map<String, bool> transitionsData = {
-                'startsDiscussion': true,
-              };
+                    Map<String, bool> transitionsData = {
+                      'startsDiscussion': true,
+                    };
 
-              await FirebaseFirestore.instance
-                  .collection(roomsString)
-                  .doc(_roomId)
-                  .collection(triggersString)
-                  .doc(transitionsString)
-                  .update(transitionsData);
+                    await FirebaseFirestore.instance
+                        .collection(roomsString)
+                        .doc(_roomId)
+                        .collection(triggersString)
+                        .doc(transitionsString)
+                        .update(transitionsData);
 
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MasterDiscussionRoomPage(
-                    roomId: _roomId,
-                  ),
-                ),
-                (_) => false,
-              );
-            },
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MasterDiscussionRoomPage(
+                          roomId: _roomId,
+                        ),
+                      ),
+                      (_) => false,
+                    );
+                  },
           ),
         ],
       ),
