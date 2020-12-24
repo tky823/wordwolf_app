@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "1098911073760",
+    "project_id": "wordwolf-app-tky823",
+    "storage_bucket": "wordwolf-app-tky823.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1098911073760:android:26762e47ca449be53bd785",
+        "android_client_info": {
+          "package_name": "com.example.wordwolf_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1098911073760-eiqkjk8qpclsf8cg7u9e9liag0e0qhm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvBSsdDvGd6yAWevTGSbSSrvBuYBH8aYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1098911073760-eiqkjk8qpclsf8cg7u9e9liag0e0qhm7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1098911073760-6uj27ssf1o8gbnnjb6rlaqo76tbaq6ma.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.wordwolfApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
