@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  Future<void> _validatesEntrace(String roomId) async {
+  Future<void> _validatesEntrance(String roomId) async {
     DocumentSnapshot snapshot = await FirebaseFirestore.instance
         .collection(roomsString)
         .doc(roomId)
@@ -380,7 +380,7 @@ class _HomePageState extends State<HomePage> {
               child: Text('入室'),
               onPressed: () async {
                 await _existsRoom(_roomId);
-                await _validatesEntrace(_roomId);
+                await _validatesEntrance(_roomId);
                 await _validatesPassword(_password);
 
                 Navigator.pop(context);
