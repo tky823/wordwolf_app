@@ -206,14 +206,13 @@ class _HomePageState extends State<HomePage> {
     await _showEntranceAlertDialog(context);
 
     if (_nextPageTransitionIs) {
-      Navigator.pushAndRemoveUntil(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => PlayerWaitingRoomPage(
             roomId: _roomId,
           ),
         ),
-        (_) => false,
       );
     }
   }
