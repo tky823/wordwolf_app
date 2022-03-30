@@ -81,10 +81,10 @@ class _HomePageState extends State<HomePage> {
           children: [
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: RaisedButton(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.orange, onPrimary: Colors.white),
                 child: Text('部屋の作成'),
-                color: Colors.orange,
-                textColor: Colors.white,
                 onPressed: () async {
                   await _makeRoom();
                 },
@@ -92,10 +92,10 @@ class _HomePageState extends State<HomePage> {
             ),
             Padding(
               padding: EdgeInsets.all(20.0),
-              child: RaisedButton(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.orange, onPrimary: Colors.white),
                 child: Text('部屋に入る'),
-                color: Colors.orange,
-                textColor: Colors.white,
                 onPressed: () async {
                   await _enterRoom();
                 },
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('作成'),
               onPressed: () async {
                 await _existsRoom(_roomId);
@@ -321,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                 }
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('戻る'),
               onPressed: () {
                 Navigator.pop(context);
@@ -376,7 +376,7 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('入室'),
               onPressed: () async {
                 await _existsRoom(_roomId);
@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage> {
                     .set(userData);
               },
             ),
-            FlatButton(
+            TextButton(
               child: Text('戻る'),
               onPressed: () {
                 _nextPageTransitionIs = false;
@@ -453,7 +453,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('戻る'),
               onPressed: () {
                 Navigator.pop(context);
@@ -480,7 +480,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text('戻る'),
               onPressed: () {
                 Navigator.pop(context);

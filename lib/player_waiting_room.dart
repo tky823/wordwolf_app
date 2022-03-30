@@ -99,13 +99,13 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
               textAlign: TextAlign.center,
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: Colors.orange, onPrimary: Colors.white),
             child: Text(
               '退室',
               style: smallerNormalFont,
             ),
-            color: Colors.orange,
-            textColor: Colors.white,
             onPressed: () async {
               Navigator.pop(context);
 

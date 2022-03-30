@@ -209,13 +209,13 @@ class _MasterWaitingRoomPageState extends State<MasterWaitingRoomPage> {
               style: smallerNormalFont,
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: Colors.orange, onPrimary: Colors.white),
             child: Text(
               'スタート',
               style: smallerNormalFont,
             ),
-            color: Colors.orange,
-            textColor: Colors.white,
             onPressed: _memberRecords.length < minMembers
                 ? null
                 : () async {

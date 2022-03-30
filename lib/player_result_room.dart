@@ -29,7 +29,6 @@ class _PlayerResultRoomPageState extends State<PlayerResultRoomPage> {
 
   String _roomId = '-1';
   String _uid = '-1';
-  String _werewolfUid = '-1';
   Map<String, String> _themes = {'citizen': '-1', 'werewolf': '-1'};
   List<Record> _records;
 
@@ -111,9 +110,9 @@ class _PlayerResultRoomPageState extends State<PlayerResultRoomPage> {
           _records.where((record) => (record.votes == maxVotes));
 
       if (recordWithMaxVotes.length == 1) {
-        columns.add(RaisedButton(
-            color: Colors.orange,
-            textColor: Colors.white,
+        columns.add(ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: Colors.orange, onPrimary: Colors.white),
             child: Text('結果を見る', style: smallerNormalFont),
             onPressed: () {
               deactivateMonitoringMembers();
