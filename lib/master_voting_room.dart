@@ -115,10 +115,10 @@ class _MasterVotingRoomPageState extends State<MasterVotingRoomPage> {
           },
         ),
       ),
-      RaisedButton(
+      ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            primary: Colors.orange, onPrimary: Colors.white),
         child: const Text('投票を送信'),
-        color: Colors.orange,
-        textColor: Colors.white,
         onPressed: _pushVote,
       ),
     ]);
