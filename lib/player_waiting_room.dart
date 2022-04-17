@@ -22,6 +22,8 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
   final String membersString = 'members';
   final String triggersString = 'triggers';
   final String transitionsString = 'transitions';
+  final String genreIdString = 'genreId';
+  final String genreNameString = 'genreName';
 
   String _roomId = '-1';
   String _uid = '-1';
@@ -82,7 +84,7 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
             padding: EdgeInsets.all(10.0),
             child: ListTile(
               title: Text(
-                _genre['genreName'],
+                _genre[genreNameString],
                 style: biggerNormalFont,
                 textAlign: TextAlign.center,
               ),
@@ -97,13 +99,13 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
               textAlign: TextAlign.center,
             ),
           ),
-          RaisedButton(
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: Colors.orange, onPrimary: Colors.white),
             child: Text(
               '退室',
               style: smallerNormalFont,
             ),
-            color: Colors.orange,
-            textColor: Colors.white,
             onPressed: () async {
               Navigator.pop(context);
 
@@ -174,7 +176,7 @@ class _PlayerWaitingRoomPageState extends State<PlayerWaitingRoomPage> {
         .listen((snapshot) async {
       final data = snapshot.data();
       setState(() {
-        _genre['genreName'] = data['genreName'];
+        _genre[genreNameString] = data[genreNameString];
         _discussionTimeMinutes = data['discussionTimeMinutes'];
       });
     });
